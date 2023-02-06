@@ -17,22 +17,25 @@ export async function getHotels (req:AuthenticatedRequest, res: Response) {
         const ticket = await ticketService.getTicketByUserId(userId)
 
         if(!ticket || !enrollment){
-            res.sendStatus(404)
+            return res.sendStatus(404)
         }
 
-        if( ticket.status !== "PAID" || ticket.TicketType.isRemote === true || ticket.TicketType.includesHotel === false) {
-            res.sendStatus(402)
+        if( ticket?.status !== "PAID" || ticket?.TicketType.isRemote === true || ticket?.TicketType.includesHotel === false) {
+            return res.sendStatus(402)
         }
 
         const hotels = await hotelsRepository.getHotels()
 
-        if(hotels.length < 1){
-            res.sendStatus(404)
+        if(hotels?.length < 1){
+            return res.sendStatus(404)
         }
 
         res.status(200).send(hotels)
 
     } catch (err) {
+        if(err.name === 'NotFoundError'){
+            res.sendStatus(404)
+        }
         res.sendStatus(400)
     }
 }

@@ -9,6 +9,7 @@ import { createUser, createEnrollmentWithAddress, generateCreditCardData,
 import { TicketStatus } from "@prisma/client";
 import jwt from "jsonwebtoken";
 
+
 beforeAll(async () => {
     await init()
     await cleanDb()
@@ -115,10 +116,11 @@ describe("GET hotels", () => {
             expect(response.body).toEqual(
                 expect.arrayContaining([
                     expect.objectContaining({
+                        createdAt: expect.any(String),
                         id: expect.any(Number),
                         name: expect.any(String),
                         image: expect.any(String),
-                        rooms: expect.any(Array)
+                        updatedAt: expect.any(String)
                     })
                 ])
             )
