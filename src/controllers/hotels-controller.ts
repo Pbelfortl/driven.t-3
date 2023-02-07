@@ -1,6 +1,4 @@
-import { notFoundError } from "@/errors";
 import { AuthenticatedRequest } from "@/middlewares";
-import ticketRepository from "@/repositories/ticket-repository";
 import ticketService from "@/services/tickets-service";
 import enrollmentsService from "@/services/enrollments-service";
 import { Response } from "express";
@@ -67,6 +65,9 @@ export async function getRoomsbyHotelId (req: AuthenticatedRequest, res: Respons
         res.status(200).send(rooms)
 
     } catch (err) {
+        if(err.name === 'NotFoundError'){
+            res.sendStatus(404)
+        }
         res.sendStatus(400)
     }
 }
